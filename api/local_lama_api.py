@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
 from models.request_model import (
     AddTextRequest,
     DeleteTextRequest,
@@ -12,16 +13,16 @@ from models.response_model import (
     SearchResponse,
     ChunkSimilarityItem,
 )
-from services.rag_service import (
+from services.local_lama_service import (
     add_text_to_db,
     delete_text_from_db,
     query_db,
+    query_db_stream,
     similarity_search_chunks,
 )
 import time
 
-router = APIRouter(prefix="/rag", tags=["RAG"])
-
+router = APIRouter(prefix="/llama", tags=["LLAMA"])
 
 
 @router.post("/add", response_model=AddTextResponse)
@@ -44,15 +45,9 @@ def delete_text(req: DeleteTextRequest):
     )
 
 
-@router.post("/query", response_model=QueryResponse)
+@router.post("/query")
 def query_text(req: QueryRequest):
-    start_time = time.time()
-    answer = query_db(req.question)
-    latency = time.time() - start_time
-    return QueryResponse(
-        latency=latency,
-        answer=answer,
-    )
+    return StreamingResponse(query_db_stream(req.question), media_type="text/plain")
 
 
 @router.post("/search", response_model=SearchResponse)
@@ -60,8 +55,7 @@ def similarity_search(req: SearchRequest):
     start_time = time.time()
     results = similarity_search_chunks(req.query, k=req.top_k)
     chunks = [
-        ChunkSimilarityItem(content=content, score=score)
-        for content, score in results
+        ChunkSimilarityItem(content=content, score=score) for content, score in results
     ]
     latency = time.time() - start_time
     return SearchResponse(

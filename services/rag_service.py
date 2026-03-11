@@ -16,7 +16,7 @@ embeddings = GoogleGenerativeAIEmbeddings(
 vector_store = PineconeVectorStore(index_name=INDEX_NAME, embedding=embeddings)
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash-lite",    
+    model="gemini-2.5-flash-lite",
     temperature=0.1,
     google_api_key=os.getenv("GEMINI_API_KEY"),
 )
@@ -38,7 +38,6 @@ def process_text(text: str) -> str:
     cleaned_text = " ".join(cleaned_lines)
     print(cleaned_text)
     return cleaned_text
-
 
 
 def add_text_to_db(index_id: str, raw_text: str) -> Tuple[List[str], int]:
@@ -86,13 +85,14 @@ def query_db(question: str) -> str:
                     "Avoid lists, bullet points, markdown formatting, symbols, or emphasis markers. "
                     "Write clean sentences, one after the other, as a short paragraph. "
                     "If the context does not contain the answer or any part of it, respond exactly with: "
-                    "\"I do not have enough information to answer the question.\""
+                    '"I do not have enough information to answer the question."'
                     "\n\nContext:\n{context}"
                 ),
             ),
             (
                 "user",
                 (
+                    "This is an example of how to answer a question using the context.\n"
                     "Question:\n"
                     "What technologies power the RAG microservice?\n\n"
                     "Context:\n"
