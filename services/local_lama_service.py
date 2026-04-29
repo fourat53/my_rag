@@ -2,10 +2,12 @@ import os
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 
+lama_url = os.getenv("LLAMA_DEV_URL") 
+
 llm = ChatOllama(
     model="qwen2.5:3b",
     temperature=0.3,
-    base_url=os.getenv("LLAMA_DEV_URL"),
+    base_url=lama_url,
     num_gpu=1,
 )
 

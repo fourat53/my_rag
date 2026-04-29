@@ -1,6 +1,7 @@
 # AI Microservice Backend
 
 ## Overview
+
 This project is a FastAPI-based AI microservice providing robust endpoints for Retrieval-Augmented Generation (RAG) and Local LLM processing. It leverages Langchain, Pinecone for vector storage, Google GenAI, and Ollama to power the intelligent backend for our chat application.
 
 ## Installation
@@ -22,7 +23,7 @@ This project is a FastAPI-based AI microservice providing robust endpoints for R
    ```env
    NEXT_PROD_URL=https://your-production-frontend-url.com
    NEXT_DEV_URL=http://localhost:3000
-   # Add your specific API keys here (e.g., PINECONE_API_KEY, GOOGLE_API_KEY)
+   # Add your specific API keys here (e.g., PINECONE_API_KEY, GEMINI_API_KEY)
    ```
 
 ## Usage
@@ -30,6 +31,7 @@ This project is a FastAPI-based AI microservice providing robust endpoints for R
 You can run the backend service either locally using Uvicorn or via Docker.
 
 **Running locally:**
+
 1. Start the FastAPI server using Uvicorn:
    ```bash
    uv run uvicorn main:app --reload
@@ -37,6 +39,7 @@ You can run the backend service either locally using Uvicorn or via Docker.
 2. The API will be available at `http://localhost:8000`. You can explore the interactive API documentation at `http://localhost:8000/docs`.
 
 **Running with Docker:**
+
 1. Ensure Docker is installed and running.
 2. Build and run the container:
    ```bash
@@ -44,10 +47,13 @@ You can run the backend service either locally using Uvicorn or via Docker.
    ```
 
 ## Licensing
+
 This project is licensed under the MIT License.
 
 ## Contributing
+
 Contributions are welcome! To contribute:
+
 1. Fork the project.
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
