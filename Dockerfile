@@ -47,5 +47,5 @@ COPY . .
 # Expose the port that the application listens on.
 EXPOSE 8000
 
-# Run the application.
-CMD uvicorn main:app --reload
+# Bind on all interfaces; avoid --reload in containers (worker restarts drop streams).
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

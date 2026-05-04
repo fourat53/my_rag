@@ -5,20 +5,20 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_pinecone import PineconeVectorStore
 from langchain_core.prompts import ChatPromptTemplate
-from core.pinecone import INDEX_NAME
 
 MAX_CHUNKS_FOR_DELETE = 10_000
+gemini_api_key = os.getenv("GEMINI_API_KEY")
 
 embeddings = GoogleGenerativeAIEmbeddings(
-    model="models/gemini-embedding-001", google_api_key=os.getenv("GEMINI_API_KEY")
+    model="models/gemini-embedding-001", google_api_key=gemini_api_key
 )
 
-vector_store = PineconeVectorStore(index_name=INDEX_NAME, embedding=embeddings)
+vector_store = PineconeVectorStore(index_name="chat-example", embedding=embeddings)
 
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash-lite",
     temperature=0.2,
-    google_api_key=os.getenv("GEMINI_API_KEY"),
+    google_api_key=gemini_api_key,
 )
 
 

@@ -8,7 +8,7 @@ from models.response_model import (
     ChunkSimilarityItem,
 )
 from models.request_model import (
-    QueryRequest
+    LLMQueryRequest
 )
 from services.local_lama_service import (
     query_db_stream,
@@ -18,5 +18,5 @@ import time
 router = APIRouter(prefix="/llama", tags=["LLAMA"])
 
 @router.post("/query")
-def query_text(req: QueryRequest):
-    return StreamingResponse(query_db_stream(req.question), media_type="text/plain")
+def query_text(req: LLMQueryRequest):
+    return StreamingResponse(query_db_stream(req.question, req.model), media_type="text/plain")

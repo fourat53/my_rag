@@ -1,13 +1,10 @@
-import requests
-import os
-import sys
-import time
 from dotenv import load_dotenv
+import requests
+import json
+import time
+import os
 
 load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
-
-DEFAULT_URL = os.getenv("LLAMA_DEV_URL", "http://localhost:11434")
-SERVER_URL = "http://localhost:8000/llama/query"
 
 BOLD = "\033[1m"
 DIM = "\033[2m"
@@ -104,7 +101,7 @@ def query_ollama_direct(base_url: str, model: str, messages: list[dict]) -> str 
 
 
 def query_fastapi_server(question: str) -> str | None:
-    return stream_response(SERVER_URL, {"question": question})
+    return stream_response(f"{os.getenv('LLAMA_DEV_URL')}/llama/query", {"question": question})
 
 
 def pick_model(base_url: str) -> str | None:
@@ -127,14 +124,11 @@ def pick_model(base_url: str) -> str | None:
     return None
 
 
-import json
-
-
 def main():
-    base_url = DEFAULT_URL
+    base_url = os.getenv("LLAMA_DEV_URL")
     models = get_available_models(base_url)
     current_model = models[0] if models else "qwen2.5:3b"
-    mode = "ollama"
+    mode = "local-ollama"
     history: list[dict] = []
 
     print_banner()
@@ -181,8 +175,8 @@ def main():
                 print(f"  {RED}No models found or Ollama not reachable{RESET}")
 
         elif cmd == "/mode":
-            mode = "fastapi" if mode == "ollama" else "ollama"
-            label = "Ollama direct" if mode == "ollama" else "FastAPI server"
+            mode = "fastapi" if mode == "local-ollama" else "local-ollama"
+            label = "Ollama direct" if mode == "local-ollama" else "FastAPI server"
             print(f"\n  {GREEN}Mode → {BOLD}{label}{RESET}")
             print_status(current_model, mode)
             print()
@@ -205,7 +199,7 @@ def main():
                 print()
 
         else:
-            if mode == "ollama":
+            if mode == "local-ollama":
                 history.append({"role": "user", "content": user_input})
                 print(f"  {YELLOW}Assistant:{RESET} ", end="", flush=True)
                 start = time.time()

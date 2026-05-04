@@ -4,11 +4,8 @@ from pinecone import Pinecone, ServerlessSpec
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
-INDEX_NAME = "my-rag-index-gemini"
-
-
 def create_index(
-    name: str = INDEX_NAME,
+    name: str = "chat-example",
     dimension: int = 3072,
     metric: str = "cosine",
     chunk_size: int = 1000,
