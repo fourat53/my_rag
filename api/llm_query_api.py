@@ -30,7 +30,7 @@ def _stream_with_error_boundary(streamer, question: str, model: str):
     except Exception:
         logger.exception("LLM stream failed")
         yield (
-            "\n[stream_error] The model request failed. "
+            "\nThe model request failed. "
             "Check API keys, model id, and upstream connectivity.\n"
         )
 

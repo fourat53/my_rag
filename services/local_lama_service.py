@@ -2,7 +2,7 @@ import os
 from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 
-lama_url = os.getenv("LLAMA_DEV_URL")
+lama_url = os.getenv("LLAMA_LOCAL_URL")
 
 
 def get_llm(model: str):

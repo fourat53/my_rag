@@ -101,7 +101,9 @@ def query_ollama_direct(base_url: str, model: str, messages: list[dict]) -> str 
 
 
 def query_fastapi_server(question: str) -> str | None:
-    return stream_response(f"{os.getenv('LLAMA_DEV_URL')}/llama/query", {"question": question})
+    return stream_response(
+        f"{os.getenv('LLAMA_LOCAL_URL')}/llama/query", {"question": question}
+    )
 
 
 def pick_model(base_url: str) -> str | None:
@@ -125,7 +127,7 @@ def pick_model(base_url: str) -> str | None:
 
 
 def main():
-    base_url = os.getenv("LLAMA_DEV_URL")
+    base_url = os.getenv("LLAMA_LOCAL_URL") or ""
     models = get_available_models(base_url)
     current_model = models[0] if models else "qwen2.5:3b"
     mode = "local-ollama"
