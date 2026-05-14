@@ -1,15 +1,14 @@
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-
-gemini_key = os.getenv("GEMINI_API_KEY", "")
 
 
 def get_llm(model: str):
-    return ChatGoogleGenerativeAI(
+    return ChatOpenAI(
         model=model,
         temperature=0.3,
-        google_api_key=gemini_key,
+        api_key=os.getenv("GEMINI_API_KEY"),
+        base_url=os.getenv("GEMINI_BASE_URL"),
     )
 
 

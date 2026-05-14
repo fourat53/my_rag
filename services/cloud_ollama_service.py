@@ -2,16 +2,13 @@ import os
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 
-cloud_url = os.getenv("CLOUD_OLLAMA_URL", "")
-cloud_key = os.getenv("CLOUD_OLLAMA_API_KEY", "")
-
 
 def get_llm(model: str):
     return ChatOpenAI(
         model=model,
         temperature=0.3,
-        base_url=cloud_url,
-        api_key=cloud_key,
+        api_key=os.getenv("OLLAMA_API_KEY"),
+        base_url=os.getenv("OLLAMA_BASE_URL"),
     )
 
 

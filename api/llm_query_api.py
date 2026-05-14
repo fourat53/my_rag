@@ -9,6 +9,7 @@ from services.openai_service import query_db_stream as openai_stream
 from services.gemini_service import query_db_stream as gemini_stream
 from services.openrouter_service import query_db_stream as openrouter_stream
 from services.nvidia_service import query_db_stream as nvidia_stream
+from services.lm_studio_service import query_db_stream as lm_studio_stream
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,7 @@ STREAMERS = {
     "gemini": gemini_stream,
     "openrouter": openrouter_stream,
     "nvidia": nvidia_stream,
+    "lm-studio": lm_studio_stream,
 }
 
 

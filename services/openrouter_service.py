@@ -2,15 +2,13 @@ import os
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 
-openrouter_key = os.getenv("OPENROUTER_API_KEY", "")
-
 
 def get_llm(model: str):
     return ChatOpenAI(
         model=model,
         temperature=0.3,
-        base_url="https://openrouter.ai/api/v1",
-        api_key=openrouter_key,
+        api_key=os.getenv("OPENROUTER_API_KEY"),
+        base_url=os.getenv("OPENROUTER_BASE_URL"),
     )
 
 
