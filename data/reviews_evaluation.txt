@@ -1,0 +1,346 @@
+Guided project 3: Extract Pros and Cons from Product Reviews
+
+Problem Statement:
+
+Identify pros and cons from mobile phone reviews shared on an ecommerce platform
+
+To enhance product feedback analysis, marketers and product managers must effectively review customer opinions.
+
+This analysis allows them to identify strengths and weaknesses of the product and prioritize areas for improvement.
+
+Imagine you are a product manager presented with a corpus of customer reviews for a newly launched mobile phone on an e-commerce platform.
+
+Your task is to analyze these reviews and summarize key points mentioned by customers.
+
+This summary will help refine the product experience and address any shortcomings in the critical initial days after launch.
+
+Create a concise summary of pros and cons mentioned by customers in the reviews.
+
+ 
+Input/ Dataset
+
+    Text of reviews extracted from the commerce page of a mobile phone product: Dataset - Mobile Phone Reviews
+    You can assume that this data is presented as input to the model as context along with your prompt.
+
+ 
+Approach
+
+    You will work on this project in the GL Prompt Playground - GL Prompt Playground
+    For strategies to write a good prompt, refer to the document: Approach - Guidelines to write a Good Prompt
+
+ Submission Guidelines & Model Solution
+
+Once you've completed the project:
+
+    Submit Prompt: Once you've completed the project in the playground and are satisfied with the output, copy the prompt and submit
+    Ideal Prompt: You can now also refer to the ideal prompt shared and check how your prompt compares to the ideal prompt and compare the quality of output as well
+
+
+****************************************
+
+Dataset - Mobile Phone Reviews:
+
+Reviewed in India on 12 October 2024
+Verified Purchase
+I've been using this Samsung phone for a week now, and it's been a pleasant experience.
+For a price of around ₹6,500-₹7,000, it’s quite impressive.
+The lack of a fingerprint sensor might bother some, but the face unlock works decently.
+While I miss having a Full HD display, the screen quality is still decent enough for streaming and social media.
+For everyday use, it’s reliable, and I’d recommend it to anyone looking for a basic smartphone without breaking the bank.
+
+Reviewed in India on 13 October 2024
+Verified Purchase
+This Samsung phone is a solid budget option.
+I’ve been using it for a couple of weeks now, and for basic activities like messaging, calling, and social media, it works perfectly.
+Yes, there’s no fingerprint scanner, and the speaker quality could be better, but at this price, those are small compromises.
+If you’re not a heavy gamer or need advanced features, this phone does the job well enough.
+
+Reviewed in India on 14 October 2024
+Verified Purchase
+At this price point, this Samsung phone offers great value.
+It’s not perfect – the lack of a charger in the box was inconvenient, and the speaker isn’t the best.
+But the battery life is decent, and it handles daily tasks with ease.
+The absence of a Full HD screen is noticeable, but the overall performance for regular use like browsing and streaming makes up for it.
+Recommended for budget-conscious users.
+
+Reviewed in India on 15 October 2024
+Verified Purchase
+I bought this Samsung phone recently and wasn’t expecting too much, given the price range of ₹6,500-₹7,000.
+Surprisingly, it delivers quite well.
+The face unlock is quick, though not as secure as a fingerprint scanner.
+The speakers and display are average, but for calls, social media, and light streaming, it’s a solid choice.
+If you’re looking for a simple and affordable device, go for it.
+
+Reviewed in India on 16 October 2024
+Verified Purchase
+After using this Samsung phone for a month, I’m satisfied with its performance for the price.
+The missing fingerprint sensor is a slight letdown, and the absence of a charger in the box was inconvenient.
+However, the phone performs well for basic tasks.
+The display, while not Full HD, is good enough for everyday use.
+Great for someone who doesn’t need a powerhouse phone.
+
+Reviewed in India on 17 October 2024
+Verified Purchase
+This Samsung phone is a good pick for casual users.
+It’s not a gaming phone, but for social media, browsing, and calling, it’s more than enough.
+The battery life is decent, and it’s lightweight and easy to carry.
+The speakers and screen could be better, but considering the price, it’s hard to complain.
+Would recommend it for basic use.
+
+Reviewed in India on 18 October 2024
+Verified Purchase
+The Samsung phone is a decent choice in the budget segment.
+Sure, it has its downsides, like the absence of a fingerprint scanner and the lack of a charger in the box.
+However, it’s perfect for light use – browsing, streaming, and messaging.
+For the price of around ₹7,000, it’s a great deal if you’re not expecting flagship-level performance.
+
+Reviewed in India on 19 October 2024
+Verified Purchase
+I got this Samsung phone as a secondary device, and it’s serving its purpose well.
+The face unlock is a nice touch, though I wish there was a fingerprint sensor.
+The display is decent, and the build quality is surprisingly good for the price.
+It’s not meant for power users but works perfectly for basic needs.
+
+Reviewed in India on 20 October 2024
+Verified Purchase
+This Samsung phone punches above its weight for the price.
+The performance is adequate for daily tasks, though it’s not meant for gaming or heavy multitasking.
+The absence of a charger in the box was annoying, but overall, the phone is reliable and user-friendly.
+Perfect for anyone looking for an affordable device.
+
+Reviewed in India on 21 October 2024
+Verified Purchase
+At first, I was skeptical about this phone, but it’s proven to be quite good for its price.
+The screen resolution isn’t top-notch, and the speakers could use an upgrade, but for everyday activities like browsing and social media, it’s perfect.
+If you’re on a tight budget, this phone is worth considering.
+
+Reviewed in India on 22 October 2024
+Verified Purchase
+I bought this Samsung phone as a gift for my mom, and she loves it.
+It’s simple to use, and the battery lasts a full day with her light usage.
+The face unlock is convenient for her, and the screen is bright enough for reading and streaming videos.
+It’s a great budget phone for non-tech-savvy users.
+
+Reviewed in India on 23 October 2024
+Verified Purchase
+For the price, this Samsung phone delivers what it promises.
+It’s not a performance beast but handles basic tasks without issues.
+I was disappointed by the lack of a charger in the box, but the battery life and smooth performance for calls, messages, and light apps make up for it.
+Great for everyday use.
+
+Reviewed in India on 24 October 2024
+Verified Purchase
+This phone is an excellent choice for anyone on a budget.
+It’s lightweight, durable, and handles basic tasks like browsing and texting well.
+The speakers aren’t the loudest, and the screen is average, but for this price range, it’s hard to beat.
+A good purchase for casual users.
+
+Reviewed in India on 25 October 2024
+Verified Purchase
+This Samsung device is a decent entry-level phone.
+I use it mainly for calls and occasional browsing, and it works just fine.
+The lack of a fingerprint sensor is a bit of a downside, but the face unlock is reasonably fast.
+The absence of a charger in the box is inconvenient, but overall, the phone is good value for money.
+
+Reviewed in India on 26 October 2024
+Verified Purchase
+This phone is a lifesaver for budget-conscious buyers.
+It’s simple, efficient, and does what it’s supposed to do.
+The speakers and screen aren’t great, but the overall usability is excellent for the price.
+Perfect for students or anyone looking for an affordable smartphone.
+
+Reviewed in India on 27 October 2024
+Verified Purchase
+I’ve been using this Samsung phone for a month now, and it’s been reliable.
+The face unlock works well, though it’s not as secure as a fingerprint scanner.
+The battery life is good, and the phone handles everyday tasks smoothly.
+For the price, it’s a great option for non-heavy users.
+
+Reviewed in India on 28 October 2024
+Verified Purchase
+This phone is a no-frills device that gets the basics right.
+It’s affordable, easy to use, and has decent performance for calls, messaging, and light apps.
+The lack of a charger in the box was a hassle, but the phone itself is great for its price.
+Recommended for casual users.
+
+Reviewed in India on 29 October 2024
+Verified Purchase
+A solid budget smartphone from Samsung.
+It’s not going to blow you away with features, but it’s reliable for basic needs.
+The screen quality and speaker output are average, but the build is sturdy, and the phone performs well for the price.
+Ideal for anyone who just needs a functional phone.
+
+Reviewed in India on 30 October 2024
+Verified Purchase
+This Samsung phone is worth every penny if you’re looking for an affordable option.
+It’s easy to use, lightweight, and handles everyday tasks like browsing and texting without a hitch.
+The face unlock is a nice feature, though I do miss having a fingerprint sensor.
+Overall, a good purchase.
+
+Reviewed in India on 31 October 2024
+Verified Purchase
+I’ve been using this phone for basic tasks, and it performs well within its price range.
+The battery lasts a full day, and the phone feels comfortable to hold.
+It’s not designed for gaming or heavy multitasking, but for regular use, it’s a dependable device.
+Good value for money.
+
+Reviewed in India on 1 November 2024
+Verified Purchase
+This Samsung phone is great for light users.
+It’s affordable, functional, and easy to operate.
+The speakers could be better, and a Full HD display would’ve been nice, but for everyday tasks, it works just fine.
+Highly recommended for those on a budget.
+
+Reviewed in India on 2 November 2024
+Verified Purchase
+For someone who doesn’t need a high-end phone, this is perfect.
+It’s reliable, has decent battery life, and is lightweight.
+The absence of a charger in the box was disappointing, but the phone itself is worth the price.
+Great for basic use.
+
+Reviewed in India on 3 November 2024
+Verified Purchase
+This Samsung phone exceeded my expectations for its price.
+It’s not a powerhouse but handles basic tasks well.
+The screen and speakers are average, but the phone is sturdy and performs reliably.
+A good option for anyone looking for a budget-friendly device.
+
+Reviewed in India on 4 November 2024
+Verified Purchase
+A practical choice for budget-conscious buyers.
+The phone handles everyday activities like calling, texting, and light browsing smoothly.
+The face unlock feature is convenient, though a fingerprint scanner would’ve been better.
+For the price, it’s a great deal.
+
+Reviewed in India on 5 November 2024
+Verified Purchase
+This Samsung phone is ideal for users who need a simple, no-frills device.
+It’s not meant for gaming or advanced features, but it works well for regular use.
+The lack of a charger in the box is a downside, but the phone’s overall performance makes up for it.
+Recommended for casual users.
+
+Reviewed in India on 6 November 2024
+Verified Purchase
+I’ve been using this phone for a few weeks, and it’s been a frustrating experience.
+The face unlock is inconsistent, and the lack of a fingerprint scanner is a huge downside.
+The speaker quality is poor, making it hard to hear calls in noisy environments.
+Definitely not worth the price.
+
+Reviewed in India on 7 November 2024
+Verified Purchase
+This phone has too many compromises.
+The display is dull, the speakers are weak, and the performance is sluggish even with basic tasks.
+The absence of a charger in the box adds to the frustration.
+I wouldn’t recommend this phone to anyone.
+
+Reviewed in India on 8 November 2024
+Verified Purchase
+Not happy with this purchase.
+The phone lags frequently, and the face unlock barely works in low light.
+The battery drains quickly, and the screen quality is subpar.
+It’s not worth the money, even for a budget phone.
+
+Reviewed in India on 9 November 2024
+Verified Purchase
+I regret buying this phone.
+The performance is poor, and apps crash often.
+The build quality feels cheap, and the absence of a fingerprint sensor is inconvenient.
+Spend a little more and get a better phone instead.
+
+Reviewed in India on 10 November 2024
+Verified Purchase
+The phone overheats with even light use, and the battery life is terrible.
+The speaker is almost unusable for calls, and the lack of a Full HD screen makes it hard to enjoy videos.
+Definitely not worth it.
+
+Reviewed in India on 11 November 2024
+Verified Purchase
+This phone is disappointing in almost every aspect.
+The screen quality is poor, the performance is laggy, and the face unlock is unreliable.
+The lack of a charger in the box just adds to the overall bad experience.
+
+Reviewed in India on 12 November 2024
+Verified Purchase
+I’m very disappointed with this phone.
+The software feels unpolished, and the phone crashes often.
+The camera quality is below average, and the build feels flimsy.
+Not a good choice, even for basic users.
+
+Reviewed in India on 13 November 2024
+Verified Purchase
+This phone is slow and frustrating to use.
+The face unlock barely works, and the display is hard to see in bright sunlight.
+The lack of a charger in the box is a dealbreaker.
+Avoid this phone.
+
+Reviewed in India on 14 November 2024
+Verified Purchase
+The phone’s performance is disappointing.
+It struggles with even basic apps, and the battery drains quickly.
+The speakers are weak, and the build quality is poor.
+I wouldn’t recommend this phone to anyone.
+
+Reviewed in India on 15 November 2024
+Verified Purchase
+I’m not impressed with this phone.
+The display is dull, and the performance is underwhelming.
+The lack of a fingerprint sensor and a charger in the box makes it feel like a poor deal.
+Save your money and look elsewhere.
+
+****************************************
+
+Ideal prompt:
+
+You are an expert marketer tasked with extracting insights from mobile phone product reviews.
+
+Analyze the provided customer reviews of a newly launched mobile phone to summarize the key points, focusing on both positive aspects (pros) and negative aspects (cons).
+
+Guidelines:
+
+- Focus on identifying patterns or recurring themes in customer feedback.
+
+- Separate the feedback into two categories: "Pros" and "Cons."
+
+- Be concise and highlight only the key issues or praises frequently mentioned across the reviews.
+
+- Avoid including isolated or unique issues unless they are significantly impactful to product quality or usability.
+
+- Maintain objectivity and avoid rewording subjective opinions into definitive statements unless supported by multiple similar reviews.
+
+Use the following steps in your analysis
+
+    Extract Key Points from Customer Reviews:
+
+   - Skim through provided reviews to identify commonly discussed aspects of the product.
+
+   - Note down specific phrases or topics frequently highlighted as positives (pros), such as features, performance, or design.
+
+   - Similarly, identify areas criticized or considered weaknesses (cons), such as bugs, missing features, or usability challenges.
+
+    Categorize Pros and Cons:
+
+   - Separate the collected feedback into two categories: Pros and Cons.
+
+   - Rank the points within each category by frequency of mention, ensuring the most common observations are prioritized.
+
+    Summarize:
+
+   - Write short, clear summaries for both pros and cons. Avoid redundancy or over-detailed descriptions.
+
+    Format the Output:
+
+   - The final output should be in a structured format with labeled sections for "Pros" and "Cons" for clarity.
+
+The output should be formatted as follows in plain text:
+
+Pros:
+
+    [Key point summarizing a positive aspect of the product.]
+    [Additional key point(s) as needed.]
+
+Cons:
+
+    [Key point summarizing a negative aspect of the product.]
+    [Additional key point(s) as needed.]
+
+The total number of points in each category should be manageable and focused on key recurring themes (ideally 3-5 points for each).

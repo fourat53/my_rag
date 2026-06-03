@@ -1,0 +1,113 @@
+1. Good afternoon, everyone. I would like to thank the honorable jury for their precious time and for giving me this opportunity to present my project. My name is Fourat Taktak, and it’s an honor to present my end-of-study project entitled "Design and Implementation of Echo Parrot’s RAG System, Call Logs, Assistants and Integrations Features and Showcase Website". This project was supervised academically by Mr. Zied Ben Ahmed and professionally by Mr. Marouan Rhayem and Mr. Mohamed Mouhib Naffeti from ONRTECH.
+
+2. To ensure a well structured presentation, I have organized the sections as follows: I will begin with a brief  introduction, Followed by the first part, problems and objectives, Proceeding to, the second part, system architecture and methodology, Subsequently, part 3 is about the developed features, Thereafter comes number 4, the challenges and results, then Moving forward to fifth part the future perspective and closing the presentation with the conclusion.
+
+3. In today’s evolving business communication landscape, organizations face growing challenges in handling high call volumes while maintaining service quality. 
+Imagine a platform that goes beyond automated call reception by enabling intelligent call handling, personalization, and optimization.
+Echo Parrot delivers a user-friendly solution for managing call logs, AI assistants, and integrations, helping businesses enhance customer interactions efficiently.
+
+4. I shall begin with the background of my project. I completed my internship at Onrtech, a company renowned for its innovative solutions in artificial intelligence as well as web and mobile development. Headquartered in Villiers-sur-Marne, France, Onrtech collaborates with remote experts in both France and Tunisia to enhance businesses 'digital presence by delivering tailored IT solutions and expert consulting services.
+
+5. Moving forward, the existing solution for Echo Parrot, consisted of an AI-powered call automation platform designed to manage and optimize customer interactions. 
+The platform also included a Call Journal centralizing call history with detailed views and summaries. 
+In addition, the admin could manage the Entreprise Account Settings while users can define Goal Scripts to guide AI behavior during calls, handle AI Assistants configurations and organize clients data. 
+Finally, Call Analytics provided performance metrics and insights to monitor call efficiency.
+
+6. Building on the introduction, we now move to the PROBLEM STATEMENT AND OBJECTIVES.
+
+7. In this section, we highlight the main challenges the project aims to address. Before its evolution, businesses incurred high operational costs due to reliance on call center staff and constant human supervision. Service availability was limited to working hours, resulting in missed calls and lost opportunities. Handling difficult callers lacked consistency, affecting customer satisfaction, while service quality varied due to agent workload and fatigue. Moreover, traditional call systems offered limited flexibility, intelligence, and automation to adapt to evolving business needs.
+
+8. The review of existing solutions reveals three main approaches. Ringover emphasizes cloud-based telephony and CRM-integrated call management for human-led workflows, while Otter.ai focuses on conversational analysis through transcription and speech processing. Bland AI, by contrast, delivers autonomous AI phone agents for inbound and outbound calls. Most platforms address interaction, analysis, or automation separately. Echo Parrot bridges this gap by providing a unified platform that combines AI-driven call handling, post-call analysis, and seamless integrations.
+
+9. This project focused on extending the Echo Parrot platform through several targeted enhancements. A public showcase website was developed to present the product and its value. The dashboard interface was enhanced with a fully responsive design, including theme selection and multilingual support. Core features were strengthened through improved Clients and Scripts modules, as well as enhanced Call Logs and AI Assistants Management for better tracking and analysis. Voice interfaces were introduced enabling flexible AI and human voice selection. The platform was further expanded with AWS S3 integration for secure storage and Google services for calendar, drive, and sheets synchronization. A major contribution was the implementation of a Retrieval-Augmented Generation system with dedicated RAG Files Management to support efficient, context-aware knowledge retrieval.
+
+10. Part 2 as stated in the plan deals with the system architecture ad methodology.
+
+11. We adopted the Scrum framework, an agile methodology that emphasizes iterative development and regular feedback. This approach allowed us to break the project into manageable sprints, ensuring continuous improvement and adaptability.
+
+12. The product owner was mr Marouan Rhayem, the scrum master was Mr Mohamed Mouhib  Naffeti, and me and my fellow interns were the Scrum team.
+
+13. The Use Case Diagram provides a clear overview of system interactions:
+* Showcase website
+* Main Platform Foundation, Scripts and Clients
+* Call Logs, Assistants and Goals
+* Voices and Integrations
+* RAG Files and Goal Knowledge Base
+These diagrams serves as a blueprint for seamless task execution and platform integrity.
+
+14. The non-functional requirements guiding this work focused on building a robust and user-centric platform. Performance was improved by optimizing RAG response times. Scalability was addressed through careful refactoring. Security was reinforced through secure OAuth flows and encrypted credential handling for third-party integrations. Usability was enhanced providing a consistent user experience.
+
+15. The dashboard's physical architecture follows a streamlined flow. User requests are handled by Next.js client components for UI interaction, which communicate with Next.js server components for logic, then query MongoDB for data and return responses to the client.
+
+16. This slide highlights the platform’s three-tier architecture illustrated by the Presentation Tier, Logic Tier and Data Tier, all communicating securely over HTTPS, WebSockets and TCP for mongoDB connections.
+
+17. The Tools and Technologies section outlines the core stack used.
+The frontend is built with Next.js, a React-based framework.
+The backend is also implemented in Next.js server actions and route handlers while FastAPI powers the dedicated RAG microservice and Node.js was used in the socket.io microservice.
+Data persistence is managed through MongoDB for transactional data, ChromaDB for vector storage and aws s3 for file storage. 
+Key libraries include Shadcn UI for accessible components, Redux for state management, Socket.IO for real-time updates, and LangChain for orchestrating LLM workflows.
+The development lifecycle was supported by GitHub for version control and task management, AWS EC2 for deployment, VS Code as the primary IDE, and Postman for API testing.
+
+18. The third part covers the developed features.
+
+19. Starting with the first release.
+
+20. During Sprint 1, the focus was on building a fully responsive and engaging showcase website for Echo Parrot. The development included implementing a foundational navigation bar and footer and integrating advanced theme and language selection. I created all essential read-only informational pages with reusable components and animations. Additionally, a pricing page was developed with dynamic pricing options and a functional contact page was built facilitating user inquiries.
+
+21. These are some screenshots of different pages and example of mobile layout in light theme.
+
+22. Next, I built the foundational dashboard design and core management modules. I implemented responsive cards layout and a collapsible sidebar with theme and language controls. Client interface was enhanced with advanced filtering, favorites, blacklist options, client update and E.164 phone formatting. The scripts module gained update, delete, tagging, and JSON visualization features.
+
+23. This is the outcome of this sprint
+
+24. Moving to the second release
+
+25. The focus shifted in the third sprint toward enhancing analytical features. 
+The call logs module was upgraded with audio waveform visualization using Wavesurfer.js, the addition of notes, tagging, exportable history, transcription editing and translation alongside speaker statistics and user feedback. 
+Six separate assistant goal pages were merged as well into a single dynamic interface with conditional rendering, and form state management. 
+The assistant management page was also redesigned with improved layouts, search, pagination, and real-time goal status updates.
+
+26. This section showcases the deliverables of the third sprint.
+
+27. During Sprint 4, I focused on enhancing the platform's versatility through voice and integrations management. I enabled AI voice selection including assigning male and female voices to assistant goals and implemented a human voice library for Voicemail Drops and Human Introductions, completed with filtering, preview, and assignment capabilities. I also established third-party integrations, adding authentication and data display for Google Calendar, Sheets, and Drive, along with AWS S3 bucket connections for file storage.
+
+28. The images demonstrate the developed integration and voices pages.
+
+29. Closing this part with the third release
+
+30. The development of the RAG microservice followed a structured pipeline. 
+First, text processing cleaned and deduplicated raw content, with metadata such as source, RAG file ID, and goal ID being attached to each block for traceability. 
+Next, chunking was performed splitting the text into semantically coherent segments. These chunks were then indexed into vector storage by converting them into embeddings and storing them in ChromaDB as documents. Following this, context retrieval and response generation required finding relevant chunks to produce context-aware answers, supported by a caching system for repeated queries involving the same assistant goal. 
+Finally, the entire pipeline was made accessible via RESTful API endpoints including adding, deleting, searching and response generation enabling seamless integration into the Echo Parrot platform.
+
+31. to simplify, Vector search returns similar items based on their semantic meaning, rather than exact term matches.
+The Cosine similarity evaluates how similar two vectors are by comparing the angle between them where The similarity score represents the relevance level between a query and a document vectors for example.
+
+32. My focus for this sprint was extending RAG capabilities into the user-facing platform by developing the RAG Files and Knowledge Base module.
+First, I implemented a secure upload system that processes documents including images, PDFs, and audio and saving them to cloud storage, and stores their extracted content and metadata.
+Next, I built a user interface for file management, allowing users to view, filter, duplicate, and edit the stored content.
+Then, I integrated knowledge base management into goal settings, ensuring that changes to RAG files are synchronized across the database and the vector store.
+Finally, I enabled document-grounded responses by adding an assistant dialog that queries the RAG microservice during live interactions.
+
+33. This slide summarizes the sprints 5 and 6 outcomes.
+
+34. We will now showcase the challenges faced and the results achieved.
+
+35. During the development phase, several challenges emerged.
+One major difficulty involved consolidating six separate goal pages into a single dynamic interface, which required advanced state management and conditional rendering to preserve consistency across both creation and editing pages in different goal templates.
+Additionally, Balancing speed and accuracy required fine-tuning several key retrieval and generation parameters, adjusting similarity thresholds to filter only highly relevant documents and carefully calibrated chunk size and overlap for best results.
+Lastly, implementing real-time goal status updates necessitates the configuration of MongoDB replica sets and a Socket.IO watcher to maintain stable synchronization and gracefully handle connection interruptions.
+
+36. The demo starts with the showcase website and presents some of its pages in both desktop and mobile layout starting with home page, than it highlights call logs features, ai assistants, scripts, clients, voices, integrations and the RAG files implementation and retrieval.
+
+37. Looking ahead, the future evolution of the Echo Parrot platform includes:
+
+38. Expanding the range of goal templates by adding SMS and Whatsapp template. 
+The system will also extend its RAG file type support to process a wider variety of unstructured documents like videos. 
+Additionally, plans are in place to integrate more third-party services like slack integration and storage options like Azure.
+A significant technical advancement under consideration is the implementation of an MCP server to further automate call management processes.
+
+39. To conclude,
+
+40. To conclude, We aimed to showcase Echo Parrot’s Features and enhance its Dashboard capabilities providing better call automation with a RAG system and third-party integrations,
+We set out to automate calls and elevate insight — and now Echo Parrot is getting ready to take its first flight.
