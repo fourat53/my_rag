@@ -1,11 +1,8 @@
-from typing import List
+from langchain_unstructured import UnstructuredLoader as Loader
 import os
 
-from langchain_unstructured import UnstructuredLoader as Loader
-from langchain_core.documents import Document
 
-
-class LoaderUnstructured:
+class LoadUnstructured:
     @staticmethod
     def get_loader(file_path: str) -> Loader:
         return Loader(

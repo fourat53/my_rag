@@ -1,13 +1,16 @@
-from api.models.request import ChatRequest
-from chat.gemini import ChatGemini
-from api import chat_router
+from services.chat.gemini import ChatGemini
+from models.request import ChatRequest
+from models.response import ChatResponse
+from .router import chat_router
+import json
 
 
-@chat_router.post("/get_response")
+@chat_router.post("/get_response", response_model=ChatResponse)
 async def get_response(req: ChatRequest):
     try:
-        gemini = ChatGemini(model=req.model, temperature=req.temperature)
-        response = gemini.chat_with_gemini(query=req.query)
-        return {"status": "success", "response": response}
+        response_json = ChatGemini.chat_with_gemini(
+            query=req.query, model=req.model, temperature=req.temperature
+        )
+        return {"status": "success", "response": json.loads(response_json)}
     except Exception as e:
         return {"status": "error", "message": str(e)}

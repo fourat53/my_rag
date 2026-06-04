@@ -1,22 +1,19 @@
-from api import chat_router, rag_router
-
+from api.chat.router import chat_router
+from api.documents.router import rag_router
 from dotenv import load_dotenv
 from fastapi import FastAPI
+import uvicorn
 
 load_dotenv()
 
 app = FastAPI(
-    title="RAG Pipeline API",
-    description="API for RAG and LLM orchestration",
+    title="RAG API",
+    description="API for a Retrieval-Augmented Generation system",
     version="1.0.0",
 )
+
 app.include_router(rag_router, prefix="/rag", tags=["RAG Operations"])
 app.include_router(chat_router, prefix="/chat", tags=["Chat LLMs Operations"])
 
-
-def main():
-    print("Server started at http://localhost:8000")
-
-
 if __name__ == "__main__":
-    main()
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
