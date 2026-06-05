@@ -1,4 +1,4 @@
-import os, pandas as pd
+import os, pandas as pd, concurrent.futures
 from typing import List
 
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -87,7 +87,7 @@ class LoadManual:
         return [Document(page_content=df.to_string(), metadata={"source": file_path})]
 
     @staticmethod
-    async def load_image(file_path: str) -> List[Document]:
+    def load_image(file_path: str) -> List[Document]:
         llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
 
         message = [
@@ -114,24 +114,51 @@ class LoadManual:
             return [Document(page_content=f.read(), metadata={"source": file_path})]
 
     @classmethod
-    def process_file(cls, file_path: str) -> List[Document]:
+    def load_file(cls, file_path: str) -> List[Document]:
         relative_path = f"data/{file_path}"
         ext = os.path.splitext(file_path)[-1].lower()
         print(f"🔍 Extracting {ext}: {file_path}")
         match ext:
             case ".pdf":
-                return cls.load_pdf(relative_path)
+                docs = cls.load_pdf(relative_path)
             case ".docx":
-                return cls.load_docx(relative_path)
+                docs = cls.load_docx(relative_path)
             case ".pptx":
-                return cls.load_pptx(relative_path)
+                docs = cls.load_pptx(relative_path)
             case ".csv":
-                return cls.load_csv(relative_path)
+                docs = cls.load_csv(relative_path)
             case ".html":
-                return cls.load_html(relative_path)
-            case ".jpg", ".jpeg", ".png":
-                return cls.load_image(relative_path)
-            case ".txt", ".md":
-                return cls.load_text(relative_path)
+                docs = cls.load_html(relative_path)
+            case ".jpg" | ".jpeg" | ".png":
+                docs = cls.load_image(relative_path)
+            case ".txt" | ".md":
+                docs = cls.load_text(relative_path)
             case _:
                 raise ValueError(f"Unsupported file type: {ext}")
+
+        print("------------- DOCS -------------\n", docs)
+        return docs
+
+    # @classmethod
+    # def load_files(cls, folder_path: str) -> List[Document]:
+    #     base_dir = "data"
+    #     full_dir_path = os.path.join(base_dir, folder_path)
+
+    #     if not os.path.exists(full_dir_path):
+    #         raise FileNotFoundError(f"Directory not found: {full_dir_path}")
+
+    #     files_to_load = [
+    #         os.path.join(folder_path, f)
+    #         for f in os.listdir(full_dir_path)
+    #         if os.path.isfile(os.path.join(full_dir_path, f))
+    #     ]
+
+    #     all_documents = []
+
+    #     with concurrent.futures.ProcessPoolExecutor() as executor:
+    #         results = list(executor.map(cls.load_file, files_to_load))
+
+    #         for docs in results:
+    #             all_documents.extend(docs)
+
+    #     return all_documents

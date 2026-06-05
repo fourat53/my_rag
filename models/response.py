@@ -19,3 +19,8 @@ class ModelsResponse(BaseModel):
     status: str = Field(..., description="Response status")
     models_count: int = Field(..., description="Number of models")
     models: List[Dict[str, Any]] = Field(..., description="List of available models")
+
+
+class LoadDocumentResponse(BaseModel):
+    status: str = Field(..., description="Response status")
+    response: Dict[str, Any] = Field(..., description="Loaded document text")

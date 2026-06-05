@@ -1,24 +1,23 @@
-from langchain_unstructured import UnstructuredLoader as Loader
+from langchain_unstructured import UnstructuredLoader
+from langchain_core.documents import Document
+from typing import List
 import os
 
 
 class LoadUnstructured:
-    @staticmethod
-    def get_loader(file_path: str) -> Loader:
-        return Loader(
-            file_path=file_path,
-            mode="elements",
-            partition_via_api=True,
-        )
-
     @classmethod
-    def process_file(cls, file_path: str):
-        if not os.path.exists(file_path):
-            return print(f"Error: File {file_path} not found.")
-
+    def load_file(cls, file_path: str) -> List[Document] | None:
+        relative_path = f"data/{file_path}"
+        if not os.path.exists(relative_path):
+            return print(f"Error: File data/{file_path} not found.")
         try:
-            loader = cls.get_loader(file_path)
+            loader = UnstructuredLoader(
+                file_path=relative_path,
+                mode="elements",
+                partition_via_api=True,
+            )
             docs = loader.load()
+            print("------------- DOCS -------------\n", docs)
             return docs
 
         except Exception as e:
