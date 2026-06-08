@@ -1,26 +1,38 @@
+from langchain_core.documents import Document
 from pydantic import BaseModel, Field
-from typing import Union, List, Dict, Any
+from typing import List, Dict, Any
 
 
-class ChatSuccessResponse(BaseModel):
-    status: str = Field(..., description="Response status")
-    response: Dict[str, Any] = Field(..., description="Full AI response object")
-
-
+# Error Response Models
 class ErrorResponse(BaseModel):
     status: str = Field(..., description="Error status")
     message: str = Field(..., description="Error message")
 
 
+# Chat Response Models
+class ChatSuccessResponse(BaseModel):
+    status: str = Field(..., description="Response status")
+    response: Dict[str, Any] = Field(..., description="Full AI response object")
+
+
 ChatResponse = ChatSuccessResponse | ErrorResponse
 
 
-class ModelsResponse(BaseModel):
+# Models Response Models
+class ModelsSuccessResponse(BaseModel):
     status: str = Field(..., description="Response status")
     models_count: int = Field(..., description="Number of models")
-    models: List[Dict[str, Any]] = Field(..., description="List of available models")
+    models: List[Dict[str, Any]] | List[str] = Field(..., description="List of models")
 
 
-class LoadDocumentResponse(BaseModel):
+ModelsResponse = ModelsSuccessResponse | ErrorResponse
+
+
+# Document Loading Response Models
+class LoadFileSuccessResponse(BaseModel):
     status: str = Field(..., description="Response status")
-    response: Dict[str, Any] = Field(..., description="Loaded document text")
+    documents_count: int = Field(..., description="Number of documents")
+    documents: List[Document] = Field(..., description="Loaded document text")
+
+
+LoadFileResponse = LoadFileSuccessResponse | ErrorResponse
