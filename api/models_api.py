@@ -2,6 +2,7 @@ import os
 from fastapi import APIRouter, HTTPException
 from typing import List, Dict, Any
 import requests
+import json
 
 router = APIRouter(prefix="/models", tags=["Models"])
 
