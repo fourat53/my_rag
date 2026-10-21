@@ -11,10 +11,8 @@ from api.llm_query_api import router as llm_query_router
 from api.models_api import router as models_router
 
 app = FastAPI(title="Chat AI Microservice")
-next_prod_url = os.getenv("NEXT_PROD_URL")
-next_dev_url = os.getenv("NEXT_DEV_URL")
 
-origins = [next_prod_url, next_dev_url]
+origins = [os.getenv("NEXT_PUBLIC_URL")]
 
 app.add_middleware(
     CORSMiddleware,
