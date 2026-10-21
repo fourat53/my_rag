@@ -24,6 +24,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+@app.get("/")
+async def root() -> dict[str, str]:
+    return {"status": "ok", "message": "Chat AI Microservice is running"}
+
+
 app.include_router(rag_router)
 app.include_router(local_lama_router)
 app.include_router(llm_query_router)
