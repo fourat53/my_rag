@@ -6,7 +6,6 @@ pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
 
 def create_index(
-    # Must match the embedding output_dimensionality in services/rag_service.py
     name: str = "chat-example",
     dimension: int = 1024,
     metric: str = "cosine",

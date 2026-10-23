@@ -46,12 +46,10 @@ def is_allowed_file_host(url: str) -> bool:
 
 
 def resolve_filename(url: str, provided: str | None) -> str:
-    """Prefer the explicit filename, otherwise derive one from the URL path."""
     if provided and os.path.splitext(provided)[1].lower() in ALLOWED_EXTENSIONS:
         return provided
     candidate = unquote(os.path.basename(urlparse(url).path))
     if "~" in candidate and not os.path.splitext(candidate)[1].lower():
-        # UploadThing keys look like "<sqid>~<filename>.<ext>"
         after_key = candidate.split("~", 1)[1]
         if os.path.splitext(after_key)[1].lower() in ALLOWED_EXTENSIONS:
             return after_key
@@ -64,7 +62,11 @@ def download_file_from_url(url: str) -> bytes:
     with requests.get(url, stream=True, timeout=(10, 60)) as response:
         response.raise_for_status()
         content_length = response.headers.get("Content-Length")
-        if content_length and content_length.isdigit() and int(content_length) > MAX_UPLOAD_SIZE_BYTES:
+        if (
+            content_length
+            and content_length.isdigit()
+            and int(content_length) > MAX_UPLOAD_SIZE_BYTES
+        ):
             raise HTTPException(
                 status_code=413,
                 detail="File exceeds the 15 MB size limit.",

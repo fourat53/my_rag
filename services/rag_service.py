@@ -73,7 +73,6 @@ def _extract_docx(data: bytes) -> str:
 
 
 def extract_text_from_file(filename: str, data: bytes) -> str:
-    """Ingest step: extract plain text from an uploaded document."""
     extension = os.path.splitext(filename)[1].lower()
     if extension == ".pdf":
         text = _extract_pdf(data)
