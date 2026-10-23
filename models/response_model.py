@@ -10,6 +10,18 @@ class AddTextResponse(BaseModel):
     added_count: int = Field(description="Number of chunks added")
 
 
+class UploadTextResponse(BaseModel):
+    status: str
+    filename: str = Field(description="Name of the uploaded file")
+    index_id: str = Field(
+        description="Unique id used as Pinecone metadata for every chunk of this file"
+    )
+    added_chunks: List[str] = Field(
+        default_factory=list, description="Content of each added chunk"
+    )
+    added_count: int = Field(description="Number of chunks added")
+
+
 class DeleteTextResponse(BaseModel):
     status: str
     deleted_chunks: List[str] = Field(

@@ -1,17 +1,23 @@
+import io
 import os
 
 from typing import List, Tuple
+from docx import Document as DocxDocument
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_pinecone import PineconeVectorStore
 from langchain_core.prompts import ChatPromptTemplate
+from pypdf import PdfReader
 
 MAX_CHUNKS_FOR_DELETE = 10_000
+PINECONE_INDEX_DIMENSION = 1024
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 
 embeddings = GoogleGenerativeAIEmbeddings(
-    model="models/gemini-embedding-001", google_api_key=gemini_api_key
+    model="models/gemini-embedding-001",
+    google_api_key=gemini_api_key,
+    output_dimensionality=PINECONE_INDEX_DIMENSION,
 )
 
 vector_store = PineconeVectorStore(index_name="chat-example", embedding=embeddings)
@@ -40,6 +46,46 @@ def process_text(text: str) -> str:
     return cleaned_text
 
 
+def _extract_pdf(data: bytes) -> str:
+    reader = PdfReader(io.BytesIO(data))
+    pages: List[str] = []
+    for page in reader.pages:
+        page_text = (page.extract_text() or "").strip()
+        if page_text:
+            pages.append(page_text)
+    return "\n\n".join(pages)
+
+
+def _extract_docx(data: bytes) -> str:
+    document = DocxDocument(io.BytesIO(data))
+    parts: List[str] = []
+    for paragraph in document.paragraphs:
+        text = paragraph.text.strip()
+        if text:
+            parts.append(text)
+    for table in document.tables:
+        for row in table.rows:
+            cells = [cell.text.strip() for cell in row.cells]
+            row_text = " | ".join(cells).strip()
+            if row_text:
+                parts.append(row_text)
+    return "\n\n".join(parts)
+
+
+def extract_text_from_file(filename: str, data: bytes) -> str:
+    """Ingest step: extract plain text from an uploaded document."""
+    extension = os.path.splitext(filename)[1].lower()
+    if extension == ".pdf":
+        text = _extract_pdf(data)
+    elif extension == ".docx":
+        text = _extract_docx(data)
+    elif extension in {".txt", ".md", ".csv"}:
+        text = data.decode("utf-8", errors="replace")
+    else:
+        raise ValueError(f"Unsupported file type: {extension or 'unknown'}")
+    return text
+
+
 def add_text_to_db(index_id: str, raw_text: str) -> Tuple[List[str], int]:
     cleaned_text = process_text(raw_text)
     splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
@@ -63,13 +109,17 @@ def delete_text_from_db(index_id: str) -> Tuple[List[str], int]:
     return deleted_chunks, len(deleted_chunks)
 
 
-def similarity_search_chunks(query: str, k: int = 5) -> List[Tuple[str, float]]:
-    results = vector_store.similarity_search_with_score(query, k=k)
+def similarity_search_chunks(
+    query: str, k: int = 5, index_ids: List[str] | None = None
+) -> List[Tuple[str, float]]:
+    filter_dict = {"index_id": {"$in": index_ids}} if index_ids else None
+    results = vector_store.similarity_search_with_score(query, k=k, filter=filter_dict)
     return [(doc.page_content, float(score)) for doc, score in results]
 
 
-def query_db(question: str) -> str:
-    docs = vector_store.similarity_search(question, k=5)
+def query_db(question: str, index_ids: List[str] | None = None) -> str:
+    filter_dict = {"index_id": {"$in": index_ids}} if index_ids else None
+    docs = vector_store.similarity_search(question, k=5, filter=filter_dict)
     context = "\n\n".join([doc.page_content for doc in docs])
 
     prompt = ChatPromptTemplate.from_messages(

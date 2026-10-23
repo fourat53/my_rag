@@ -6,12 +6,31 @@ class AddTextRequest(BaseModel):
     text: str
 
 
+class UploadUrlRequest(BaseModel):
+    url: str = Field(
+        description="Public http(s) URL of the stored file (UploadThing)"
+    )
+    index_id: str = Field(
+        description="Unique id used as Pinecone metadata for every chunk of this file"
+    )
+    filename: str | None = Field(
+        default=None,
+        description="Original file name; used to detect the file extension for extraction",
+    )
+
+
 class DeleteTextRequest(BaseModel):
     index_id: str
 
 
 class QueryRequest(BaseModel):
     question: str
+    index_ids: list[str] | None = Field(
+        default=None,
+        description=(
+            "Optional index_id metadata values. When provided, retrieval is scoped to the chunks stored under these documents only."
+        ),
+    )
 
 
 class ChatMessage(BaseModel):
@@ -37,4 +56,10 @@ class SearchRequest(BaseModel):
     query: str
     top_k: int = Field(
         default=5, ge=1, le=100, description="Number of top chunks to return"
+    )
+    index_ids: list[str] | None = Field(
+        default=None,
+        description=(
+            "Optional index_id metadata values. When provided, retrieval is scoped to the chunks stored under these documents only."
+        ),
     )
