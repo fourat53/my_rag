@@ -1,10 +1,9 @@
 from pydantic import BaseModel, Field
-from typing import List
 
 
 class AddTextResponse(BaseModel):
     status: str
-    added_chunks: List[str] = Field(
+    added_chunks: list[str] = Field(
         default_factory=list, description="Content of each added chunk"
     )
     added_count: int = Field(description="Number of chunks added")
@@ -16,7 +15,7 @@ class UploadTextResponse(BaseModel):
     index_id: str = Field(
         description="Unique id used as Pinecone metadata for every chunk of this file"
     )
-    added_chunks: List[str] = Field(
+    added_chunks: list[str] = Field(
         default_factory=list, description="Content of each added chunk"
     )
     added_count: int = Field(description="Number of chunks added")
@@ -24,7 +23,7 @@ class UploadTextResponse(BaseModel):
 
 class DeleteTextResponse(BaseModel):
     status: str
-    deleted_chunks: List[str] = Field(
+    deleted_chunks: list[str] = Field(
         default_factory=list, description="Content of each deleted chunk"
     )
     deleted_count: int = Field(description="Number of chunks deleted")
@@ -43,6 +42,6 @@ class ChunkSimilarityItem(BaseModel):
 class SearchResponse(BaseModel):
     latency: float = Field(description="Time taken to answer the question")
     total_count: int = Field(description="Number of chunks returned")
-    chunks: List[ChunkSimilarityItem] = Field(
+    chunks: list[ChunkSimilarityItem] = Field(
         default_factory=list, description="Top-k chunks by similarity"
     )

@@ -1,4 +1,7 @@
-.PHONY: dev list outdated update audit sync
+.PHONY: dev list outdated audit freeze
+
+%:
+	@:
 
 dev:
 	uv run uvicorn main:app --reload
@@ -8,12 +11,6 @@ list:
 
 outdated:
 	uv run uv pip list --outdated
-
-%:
-	@:
-
-update:
-	uv run uv add -U $(filter-out $@,$(MAKECMDGOALS))
 
 audit:
 	uv run uv audit --preview-features audit-command

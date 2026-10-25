@@ -3,14 +3,16 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
-from models.request_model import LLMQueryRequest
-from services.local_lama_service import query_stream as local_ollama_stream
-from services.cloud_ollama_service import query_stream as cloud_ollama_stream
-from services.openai_service import query_stream as openai_stream
-from services.gemini_service import query_stream as gemini_stream
-from services.openrouter_service import query_stream as openrouter_stream
-from services.nvidia_service import query_stream as nvidia_stream
-from services.lm_studio_service import query_stream as lm_studio_stream
+from models.request import LLMQueryRequest
+from services.query import (
+    lm_studio_stream,
+    local_ollama_stream,
+    cloud_ollama_stream,
+    openrouter_stream,
+    nvidia_stream,
+    gemini_stream,
+    openai_stream,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +29,7 @@ STREAMERS = {
 }
 
 
-def _stream_with_error_boundary(
+def stream_response(
     streamer,
     question: str,
     model: str,
@@ -54,8 +56,6 @@ def query_llm(req: LLMQueryRequest):
         )
     history = [m.model_dump() for m in req.history] if req.history else []
     return StreamingResponse(
-        _stream_with_error_boundary(
-            streamer, req.question, req.model, history, req.base_url
-        ),
+        stream_response(streamer, req.question, req.model, history, req.base_url),
         media_type="text/plain",
     )

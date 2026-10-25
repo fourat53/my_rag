@@ -1,4 +1,3 @@
-import json
 import os, requests
 
 from fastapi import APIRouter, HTTPException
@@ -27,7 +26,7 @@ def get_models(provider: str, base_url: str) -> dict[str, list[dict[str, str | N
         response = requests.get(f"{base_url}/models", headers=headers, timeout=30)
         response.raise_for_status()
         data = response.json()
-        print("DATA:", json.dumps(data.get("data", [])[:1], indent=2))
+        # print("DATA:", json.dumps(data.get("data", [])[:1], indent=2))
         models = []
 
         for model in data.get("data", []):

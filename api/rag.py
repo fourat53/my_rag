@@ -1,17 +1,15 @@
-import os
-import time
-from urllib.parse import unquote, urlparse
+import os, time, requests
 
-import requests
+from urllib.parse import unquote, urlparse
 from fastapi import APIRouter, HTTPException
-from models.request_model import (
+from models.request import (
     AddTextRequest,
     DeleteTextRequest,
     QueryRequest,
     SearchRequest,
     UploadUrlRequest,
 )
-from models.response_model import (
+from models.response import (
     AddTextResponse,
     DeleteTextResponse,
     QueryResponse,
@@ -19,12 +17,12 @@ from models.response_model import (
     ChunkSimilarityItem,
     UploadTextResponse,
 )
-from services.rag_service import (
-    add_text_to_db,
-    delete_text_from_db,
-    extract_text_from_file,
+from services.rag import (
+    extract_text,
+    add_documents,
+    delete_documents,
+    similarity_search,
     query_db,
-    similarity_search_chunks,
 )
 
 router = APIRouter(prefix="/rag", tags=["RAG"])
@@ -34,7 +32,7 @@ MAX_UPLOAD_SIZE_BYTES = 15 * 1024 * 1024
 UPLOADTHING_HOST_SUFFIXES = (".ufs.sh", ".utfs.io", "uploadthing.com")
 
 
-def is_allowed_file_host(url: str) -> bool:
+def is_file_url(url: str) -> bool:
     parsed = urlparse(url)
     if parsed.scheme not in {"http", "https"}:
         return False
@@ -58,7 +56,7 @@ def resolve_filename(url: str, provided: str | None) -> str:
     return provided or "unnamed"
 
 
-def download_file_from_url(url: str) -> bytes:
+def download_file(url: str) -> bytes:
     with requests.get(url, stream=True, timeout=(10, 60)) as response:
         response.raise_for_status()
         content_length = response.headers.get("Content-Length")
@@ -88,7 +86,7 @@ def download_file_from_url(url: str) -> bytes:
 
 def extract_and_index(filename: str, data: bytes, index_id: str):
     try:
-        text = extract_text_from_file(filename, data)
+        text = extract_text(filename, data)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:
@@ -102,13 +100,13 @@ def extract_and_index(filename: str, data: bytes, index_id: str):
             status_code=400, detail="The file does not contain extractable text."
         )
 
-    return add_text_to_db(index_id, text)
+    return add_documents(index_id, text)
 
 
-@router.post("/upload-url", response_model=UploadTextResponse)
-def upload_document_from_url(req: UploadUrlRequest):
+@router.post("/upload", response_model=UploadTextResponse)
+def upload_document(req: UploadUrlRequest):
     url = req.url.strip()
-    if not is_allowed_file_host(url):
+    if not is_file_url(url):
         raise HTTPException(
             status_code=400,
             detail=(
@@ -132,7 +130,7 @@ def upload_document_from_url(req: UploadUrlRequest):
         )
 
     try:
-        data = download_file_from_url(url)
+        data = download_file(url)
     except HTTPException:
         raise
     except requests.RequestException as exc:
@@ -153,7 +151,7 @@ def upload_document_from_url(req: UploadUrlRequest):
 
 @router.post("/add", response_model=AddTextResponse)
 def add_text(req: AddTextRequest):
-    added_chunks, added_count = add_text_to_db(req.index_id, req.text)
+    added_chunks, added_count = add_documents(req.index_id, req.text)
     return AddTextResponse(
         status="success",
         added_chunks=added_chunks,
@@ -163,11 +161,26 @@ def add_text(req: AddTextRequest):
 
 @router.delete("/delete", response_model=DeleteTextResponse)
 def delete_text(req: DeleteTextRequest):
-    deleted_chunks, deleted_count = delete_text_from_db(req.index_id)
+    deleted_chunks, deleted_count = delete_documents(req.index_id)
     return DeleteTextResponse(
         status="success",
         deleted_chunks=deleted_chunks,
         deleted_count=deleted_count,
+    )
+
+
+@router.post("/search", response_model=SearchResponse)
+def search_text(req: SearchRequest):
+    start_time = time.time()
+    results = similarity_search(req.query, k=req.top_k, index_ids=req.index_ids)
+    chunks = [
+        ChunkSimilarityItem(content=content, score=score) for content, score in results
+    ]
+    latency = time.time() - start_time
+    return SearchResponse(
+        latency=latency,
+        total_count=len(chunks),
+        chunks=chunks,
     )
 
 
@@ -179,19 +192,4 @@ def query_text(req: QueryRequest):
     return QueryResponse(
         latency=latency,
         answer=answer,
-    )
-
-
-@router.post("/search", response_model=SearchResponse)
-def similarity_search(req: SearchRequest):
-    start_time = time.time()
-    results = similarity_search_chunks(req.query, k=req.top_k, index_ids=req.index_ids)
-    chunks = [
-        ChunkSimilarityItem(content=content, score=score) for content, score in results
-    ]
-    latency = time.time() - start_time
-    return SearchResponse(
-        latency=latency,
-        total_count=len(chunks),
-        chunks=chunks,
     )

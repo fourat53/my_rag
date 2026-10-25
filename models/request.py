@@ -24,7 +24,7 @@ class DeleteTextRequest(BaseModel):
 
 
 class QueryRequest(BaseModel):
-    question: str
+    question: str = Field(min_length=1)
     index_ids: list[str] | None = Field(
         default=None,
         description=(
@@ -53,7 +53,7 @@ class LLMQueryRequest(BaseModel):
 
 
 class SearchRequest(BaseModel):
-    query: str
+    query: str = Field(min_length=1)
     top_k: int = Field(
         default=5, ge=1, le=100, description="Number of top chunks to return"
     )

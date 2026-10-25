@@ -5,10 +5,7 @@ load_dotenv()
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.rag_api import router as rag_router
-from api.local_lama_api import router as local_lama_router
-from api.llm_query_api import router as llm_query_router
-from api.models_api import router as models_router
+from api import models_router, query_router, rag_router
 
 app = FastAPI(title="Chat AI Microservice")
 
@@ -29,6 +26,5 @@ async def root() -> dict[str, str]:
 
 
 app.include_router(rag_router)
-app.include_router(local_lama_router)
-app.include_router(llm_query_router)
+app.include_router(query_router)
 app.include_router(models_router)
