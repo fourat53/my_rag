@@ -2,18 +2,13 @@ import os
 
 from uuid import uuid4
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
-from core.pinecone import PINECONE_INDEX_DIMENSION, get_index
+from core.pinecone import get_index
+from .embeddings import embed_documents, embed_query
 from .text_processing import process_text
 
 gemini_api_key = os.getenv("GEMINI_API_KEY")
-
-embeddings = GoogleGenerativeAIEmbeddings(
-    model="models/gemini-embedding-001",
-    google_api_key=gemini_api_key,
-    output_dimensionality=PINECONE_INDEX_DIMENSION,
-)
 
 index = get_index()
 
@@ -36,7 +31,7 @@ def add_documents(index_id: str, raw_text: str) -> tuple[list[str], int]:
     if not chunks:
         return chunks, 0
 
-    vectors = embeddings.embed_documents(chunks)
+    vectors = embed_documents(chunks)
 
     pinecone_vectors = [
         {
@@ -99,7 +94,7 @@ def delete_documents(index_id: str) -> tuple[list[str], int]:
 def similarity_search(
     query: str, k: int = 5, index_ids: list[str] | None = None
 ) -> list[tuple[str, float]]:
-    query_vector = embeddings.embed_query(query)
+    query_vector = embed_query(query)
 
     if index_ids:
         results = index.query(
@@ -128,7 +123,7 @@ def similarity_search(
 
 
 def query_db(question: str, index_ids: list[str] | None = None) -> str:
-    query_vector = embeddings.embed_query(question)
+    query_vector = embed_query(question)
 
     if index_ids:
         results = index.query(

@@ -1,15 +1,14 @@
+def is_informative(line: str) -> bool:
+    return any(character.isalnum() for character in line)
+
+
 def process_text(text: str) -> str:
-    lines = text.split("\n")
-    cleaned_lines = []
-    seen = set()
-    for line in lines:
-        stripped = line.strip()
-        if not stripped:
+    lines: list[str] = []
+    seen: set[str] = set()
+    for raw_line in text.splitlines():
+        line = " ".join(raw_line.split())
+        if not line or not is_informative(line) or line in seen:
             continue
-        if len(stripped.split()) < 4:
-            continue
-        if stripped not in seen:
-            seen.add(stripped)
-            cleaned_lines.append(stripped)
-    cleaned_text = " ".join(cleaned_lines)
-    return cleaned_text
+        seen.add(line)
+        lines.append(line)
+    return "\n".join(lines)

@@ -18,6 +18,7 @@ from models.response import (
     UploadTextResponse,
 )
 from services.rag import (
+    SUPPORTED_EXTENSIONS,
     extract_text,
     add_documents,
     delete_documents,
@@ -27,7 +28,6 @@ from services.rag import (
 
 router = APIRouter(prefix="/rag", tags=["RAG"])
 
-ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md", ".csv"}
 MAX_UPLOAD_SIZE_BYTES = 15 * 1024 * 1024
 UPLOADTHING_HOST_SUFFIXES = (".ufs.sh", ".utfs.io", "uploadthing.com")
 
@@ -44,14 +44,14 @@ def is_file_url(url: str) -> bool:
 
 
 def resolve_filename(url: str, provided: str | None) -> str:
-    if provided and os.path.splitext(provided)[1].lower() in ALLOWED_EXTENSIONS:
+    if provided and os.path.splitext(provided)[1].lower() in SUPPORTED_EXTENSIONS:
         return provided
     candidate = unquote(os.path.basename(urlparse(url).path))
     if "~" in candidate and not os.path.splitext(candidate)[1].lower():
         after_key = candidate.split("~", 1)[1]
-        if os.path.splitext(after_key)[1].lower() in ALLOWED_EXTENSIONS:
+        if os.path.splitext(after_key)[1].lower() in SUPPORTED_EXTENSIONS:
             return after_key
-    if os.path.splitext(candidate)[1].lower() in ALLOWED_EXTENSIONS:
+    if os.path.splitext(candidate)[1].lower() in SUPPORTED_EXTENSIONS:
         return candidate
     return provided or "unnamed"
 
@@ -100,7 +100,14 @@ def extract_and_index(filename: str, data: bytes, index_id: str):
             status_code=400, detail="The file does not contain extractable text."
         )
 
-    return add_documents(index_id, text)
+    added_chunks, added_count = add_documents(index_id, text)
+
+    if added_count == 0:
+        raise HTTPException(
+            status_code=400, detail="The file does not contain indexable text."
+        )
+
+    return added_chunks, added_count
 
 
 @router.post("/upload", response_model=UploadTextResponse)
@@ -119,13 +126,13 @@ def upload_document(req: UploadUrlRequest):
 
     filename = resolve_filename(url, req.filename)
     extension = os.path.splitext(filename)[1].lower()
-    if extension not in ALLOWED_EXTENSIONS:
+    if extension not in SUPPORTED_EXTENSIONS:
         raise HTTPException(
             status_code=400,
             detail=(
                 f"Unsupported file type: {extension or 'unknown'}. "
                 f"Pass the original filename or use a URL ending with an allowed extension. "
-                f"Allowed: {sorted(ALLOWED_EXTENSIONS)}"
+                f"Allowed: {sorted(SUPPORTED_EXTENSIONS)}"
             ),
         )
 
@@ -138,6 +145,12 @@ def upload_document(req: UploadUrlRequest):
             status_code=502,
             detail=f"Failed to download the file: {exc}",
         ) from exc
+
+    if not data:
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded file is empty.",
+        )
 
     added_chunks, added_count = extract_and_index(filename, data, req.index_id)
     return UploadTextResponse(
