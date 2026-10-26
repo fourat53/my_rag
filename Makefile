@@ -1,4 +1,4 @@
-.PHONY: dev list outdated audit freeze
+.PHONY: dev list outdated audit freeze install update remove tree
 
 %:
 	@:
@@ -17,3 +17,15 @@ audit:
 
 freeze:
 	uv run uv pip freeze > requirements.txt
+
+install:
+	uv run uv pip install -r requirements.txt
+
+update:
+	uv run uv add -U $(filter-out $@,$(MAKECMDGOALS))
+
+remove:
+	uv run uv remove $(filter-out $@,$(MAKECMDGOALS))
+
+tree:
+	uv run uv tree --invert --package $(filter-out $@,$(MAKECMDGOALS))
