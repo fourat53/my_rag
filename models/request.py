@@ -46,6 +46,10 @@ class LLMQueryRequest(BaseModel):
         default=None,
         description="Per-provider API base URL (from the app's MongoDB), overrides the env fallback",
     )
+    api_key: str | None = Field(
+        default=None,
+        description="Optional per-user API key (from the app's database); overrides the env fallback for this request",
+    )
     history: list[ChatMessage] = Field(
         default_factory=list,
         description="Prior conversation turns (oldest first), excluding the current question",

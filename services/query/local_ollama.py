@@ -15,6 +15,7 @@ def query_stream(
     model: str,
     base_url: str,
     history: list[dict] | None = None,
+    api_key: str | None = None,
 ):
     llm = get_llm(model, base_url)
     messages = [

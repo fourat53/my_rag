@@ -2,6 +2,7 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
+from langchain_openai.chat_models.base import OpenAIModelNotFoundError
 from models.request import LLMQueryRequest
 from services.query import (
     lm_studio_stream,
@@ -34,9 +35,22 @@ def stream_response(
     model: str,
     history: list[dict] | None = None,
     base_url: str | None = None,
+    api_key: str | None = None,
 ):
     try:
-        yield from streamer(question, model, base_url=base_url, history=history)
+        yield from streamer(
+            question,
+            model,
+            base_url=base_url,
+            history=history,
+            api_key=api_key,
+        )
+    except OpenAIModelNotFoundError as error:
+        logger.warning("LLM model not found on provider upstream: %s", error)
+        yield (
+            "\nThe selected model is not available for the configured API key. "
+            "Pick a different model in the model selector.\n"
+        )
     except Exception:
         logger.exception("LLM stream failed")
         yield (
@@ -55,6 +69,8 @@ def query_llm(req: LLMQueryRequest):
         )
     history = [m.model_dump() for m in req.history] if req.history else []
     return StreamingResponse(
-        stream_response(streamer, req.question, req.model, history, req.base_url),
+        stream_response(
+            streamer, req.question, req.model, history, req.base_url, req.api_key
+        ),
         media_type="text/plain",
     )
