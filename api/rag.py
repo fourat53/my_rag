@@ -5,25 +5,25 @@ from fastapi import APIRouter, HTTPException
 from models.request import (
     AddTextRequest,
     DeleteTextRequest,
-    QueryRequest,
+    RagQueryRequest,
     SearchRequest,
     UploadUrlRequest,
 )
 from models.response import (
     AddTextResponse,
     DeleteTextResponse,
-    QueryResponse,
     SearchResponse,
     ChunkSimilarityItem,
     UploadTextResponse,
 )
+from api.query import stream_llm
 from services.rag import (
     SUPPORTED_EXTENSIONS,
     extract_text,
     add_documents,
     delete_documents,
     similarity_search,
-    query_db,
+    build_rag_question,
 )
 
 router = APIRouter(prefix="/rag", tags=["RAG"])
@@ -197,12 +197,19 @@ def search_text(req: SearchRequest):
     )
 
 
-@router.post("/query", response_model=QueryResponse)
-def query_text(req: QueryRequest):
-    start_time = time.time()
-    answer = query_db(req.question, index_ids=req.index_ids)
-    latency = time.time() - start_time
-    return QueryResponse(
-        latency=latency,
-        answer=answer,
+@router.post("/query")
+def rag_query(req: RagQueryRequest):
+    results = similarity_search(req.question, k=req.top_k, index_ids=req.index_ids)
+    grounded_question = build_rag_question(
+        req.question,
+        [content for content, _score in results],
+        req.document_names,
+    )
+    return stream_llm(
+        req.provider,
+        req.model,
+        grounded_question,
+        history=[m.model_dump() for m in req.history] if req.history else [],
+        base_url=req.base_url,
+        api_key=req.api_key,
     )

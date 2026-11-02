@@ -59,18 +59,33 @@ def stream_response(
         )
 
 
-@router.post("/query")
-def query_llm(req: LLMQueryRequest):
-    streamer = STREAMERS.get(req.provider)
+def stream_llm(
+    provider: str,
+    model: str,
+    question: str,
+    history: list[dict] | None = None,
+    base_url: str | None = None,
+    api_key: str | None = None,
+) -> StreamingResponse:
+    streamer = STREAMERS.get(provider)
     if not streamer:
         raise HTTPException(
             status_code=400,
-            detail=f"Unknown provider: {req.provider}. Supported: {list(STREAMERS.keys())}",
+            detail=f"Unknown provider: {provider}. Supported: {list(STREAMERS.keys())}",
         )
-    history = [m.model_dump() for m in req.history] if req.history else []
     return StreamingResponse(
-        stream_response(
-            streamer, req.question, req.model, history, req.base_url, req.api_key
-        ),
+        stream_response(streamer, question, model, history, base_url, api_key),
         media_type="text/plain",
+    )
+
+
+@router.post("/query")
+def query_llm(req: LLMQueryRequest):
+    return stream_llm(
+        req.provider,
+        req.model,
+        req.question,
+        history=[m.model_dump() for m in req.history] if req.history else [],
+        base_url=req.base_url,
+        api_key=req.api_key,
     )

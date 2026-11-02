@@ -23,16 +23,6 @@ class DeleteTextRequest(BaseModel):
     index_id: str
 
 
-class QueryRequest(BaseModel):
-    question: str = Field(min_length=1)
-    index_ids: list[str] | None = Field(
-        default=None,
-        description=(
-            "Optional index_id metadata values. When provided, retrieval is scoped to the chunks stored under these documents only."
-        ),
-    )
-
-
 class ChatMessage(BaseModel):
     role: str
     content: str
@@ -53,6 +43,23 @@ class LLMQueryRequest(BaseModel):
     history: list[ChatMessage] = Field(
         default_factory=list,
         description="Prior conversation turns (oldest first), excluding the current question",
+    )
+
+
+class RagQueryRequest(LLMQueryRequest):
+    index_ids: list[str] = Field(
+        min_length=1,
+        description="index_id metadata values; retrieval is scoped to the chunks stored under these documents",
+    )
+    top_k: int = Field(
+        default=5,
+        ge=1,
+        le=100,
+        description="Number of top chunks to retrieve as document context",
+    )
+    document_names: list[str] | None = Field(
+        default=None,
+        description="Names of the linked documents, referenced in the grounding prompt",
     )
 
 
